@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>环信集成中遇到的坑 | BryantWang&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="IM" />
+  
+  
+  
+  
+  <meta name="description" content="公司项目中需要集成即时聊天的功能,在现有项目的基础上集成环信最新的SDK遇到了很多坑,所以记录下来,看到坑就不要再往里跳了😜1.iOS SDK导入通过 Cocoapods 下载地址：不包含实时语音版本 SDK（HyphenateLite），引用时 #import &amp;lt;HyphenateLite_CN/EMSDK.h&amp;gt;pod &amp;#39;HyphenateLite_CN&amp;#39;
+
+配置工">
+<meta property="og:type" content="article">
+<meta property="og:title" content="环信集成中遇到的坑">
+<meta property="og:url" content="http://yoursite.com/2016/11/03/环信集成中的bug/index.html">
+<meta property="og:site_name" content="BryantWang's Blog">
+<meta property="og:description" content="公司项目中需要集成即时聊天的功能,在现有项目的基础上集成环信最新的SDK遇到了很多坑,所以记录下来,看到坑就不要再往里跳了😜1.iOS SDK导入通过 Cocoapods 下载地址：不包含实时语音版本 SDK（HyphenateLite），引用时 #import &amp;lt;HyphenateLite_CN/EMSDK.h&amp;gt;pod &amp;#39;HyphenateLite_CN&amp;#39;
+
+配置工">
+<meta property="og:image" content="http://yoursite.com/Users/qingongguoji1/Desktop/1240.jpep.png">
+<meta property="og:image" content="http://yoursite.com/Users/qingongguoji1/Desktop/1240.png">
+<meta property="og:image" content="http://yoursite.com/Users/qingongguoji1/Desktop/12401.png">
+<meta property="og:image" content="http://yoursite.com/Users/qingongguoji1/Desktop/12402.png">
+<meta property="og:image" content="http://yoursite.com/Users/qingongguoji1/Desktop/1.png">
+<meta property="og:updated_time" content="2017-03-06T03:04:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="环信集成中遇到的坑">
+<meta name="twitter:description" content="公司项目中需要集成即时聊天的功能,在现有项目的基础上集成环信最新的SDK遇到了很多坑,所以记录下来,看到坑就不要再往里跳了😜1.iOS SDK导入通过 Cocoapods 下载地址：不包含实时语音版本 SDK（HyphenateLite），引用时 #import &amp;lt;HyphenateLite_CN/EMSDK.h&amp;gt;pod &amp;#39;HyphenateLite_CN&amp;#39;
+
+配置工">
+<meta name="twitter:image" content="http://yoursite.com/Users/qingongguoji1/Desktop/1240.jpep.png">
+  
+    <link rel="alternate" href="/atom.xml" title="BryantWang&#39;s Blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+
+</head>
+
+<body>
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">Startseite</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">Archive</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">Kategorien</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Schreib etwas..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Beiträge',
+            PAGES: 'Seiten',
+            CATEGORIES: 'Kategorien',
+            TAGS: 'Tags',
+            UNTITLED: '(Unbenannt)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-环信集成中的bug" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      环信集成中遇到的坑
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2016/11/03/环信集成中的bug/" class="article-date">
+	  <time datetime="2016-11-03T08:53:39.000Z" itemprop="datePublished">2016-11-03</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>公司项目中需要集成即时聊天的功能,在现有项目的基础上集成环信最新的SDK遇到了很多坑,所以记录下来,看到坑就不要再往里跳了😜<br>1.iOS SDK导入<br>通过 Cocoapods 下载地址：<br>不包含实时语音版本 SDK（HyphenateLite），引用时 <code>#import &lt;HyphenateLite_CN/EMSDK.h&gt;</code><br><code>pod &#39;HyphenateLite_CN&#39;</code></p>
+<ol>
+<li>配置工程<ul>
+<li>设置工程属性<br>第 1 步：向Build Phases → Link Binary With Libraries 中添加依赖库。<br>SDK 依赖库有：<br><code>CoreMedia.framework
+AudioToolbox.framework
+AVFoundation.framework
+MobileCoreServices.framework
+ImageIO.framework
+libc++.dylib
+libz.dylib
+libstdc++.6.0.9.dylib
+libsqlite3.dylib</code>（如果使用的是 xcode7，后缀为 tbd）<br>第 2 步：SDK 不支持 bitcode，向 Build Settings → Linking → Enable Bitcode 中设置 NO。</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>编译工程<br>我相信大家到这里都应该没有问题,如果出现问题,请详细参考官方文档<br>3.iOS SDK基础功能</li>
+<li>初始化SDK<br>第 1 步：引入相关头文件#import “EMSDK.h”<br>第 2 步：在工程的 AppDelegate 中的以下方法中，调用 SDK 对应方法。<br>`- (BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary</em>)launchOptions {<br>  // 环信<br>  //AppKey:注册的AppKey，详细见下面注释。<br>  //apnsCertName:推送证书名（不需要加后缀），详细见下面注释。<br>  EMOptions *options = [EMOptions optionsWithAppkey:@”110108007702#xingnltest”];<br>  //options.apnsCertName = @”istore_dev”;<br>  [[EMClient sharedClient] initializeSDKWithOptions:options];<br>  return YES;<br>}<br>// APP进入后台</li>
+</ul>
+<ul>
+<li>(void)applicationDidEnterBackground:(UIApplication *)application{<br>  [[EMClient sharedClient] applicationDidEnterBackground:application];<br>}<br>// APP将要从后台返回</li>
+<li>(void)applicationWillEnterForeground:(UIApplication *)application{<br>   [[EMClient sharedClient] applicationWillEnterForeground:application];<br>}`</li>
+</ul>
+<ul>
+<li>注册<br>注册模式分两种，开放注册和授权注册。<ul>
+<li>只有开放注册时，才可以客户端注册。开放注册是为了测试使用，正式环境中不推荐使用该方式注册环信账号。</li>
+<li>授权注册的流程应该是您服务器通过环信提供的 REST API<br>注册，之后保存到您的服务器或返回给客户端。<br>`EMError *error = [[EMClient sharedClient] registerWithUsername:@”8001” password:@”111111”];<br>if (error==nil) {<br>NSLog(@”注册成功”);<br>}</li>
+</ul>
+</li>
+<li><p>登录<br>EMError *error = [[EMClient sharedClient] loginWithUsername:@”8001” password:@”111111”];<br>if (!error) {<br>NSLog(@”登录成功”);<br>}<br>`<br>4.EaseUI 使用指南(重点)<br>按照<a href="">官网的EaseUI</a> 使用指南集成之后总是有很多的bug,<br>先看一下EaseUI 中用到的第三方库：</p>
+</li>
+<li><p><code>MWPhotoBrowser:</code> 图片处理库，浏览显示</p>
+</li>
+<li><code>MJRefresh:</code> 用于页面刷新</li>
+<li><code>MBProgressHUD:</code> 用于提示加载刷新<br>如果你的项目是使用pod管理的,并且有<code>MJRefresh,MBProgressHUD</code>第三方库,那么可以删除<code>EaseUI</code>中重复的库,但是不能直接删除EaseUI-&gt;EMUIKit-&gt;3rdparty-&gt;MWPhotoBrowser的文件夹, 这个MWPhotoBrowser文件夹下并不只是有<code>MWPhotoBrowser</code>,还有环信自己封装的<code>EMSDWebImage</code>,还有第三方的<code>DACircularProgress</code>及<code>PSTCollectionView</code></li>
+</ul>
+<p>4.1导入EaseUI<br><img src="/Users/qingongguoji1/Desktop/1240.jpep.png" alt=""><br>编译之后,我的项目出现了26个错误<br><img src="/Users/qingongguoji1/Desktop/1240.png" alt=""><br>解决方案:<br>查看EaseUI目录下的<code>EaseUI-Prefix.pch</code>文件,把里面的代码拷贝在自己项目的pch文件中,并删除<code>EaseUI-Prefix.pch</code>,并在自己的代码中添加<code>#ifdef __OBJC__ #endif</code><br>如下图所示<br><img src="/Users/qingongguoji1/Desktop/12401.png" alt=""><br>走到这一步后我的项目中还有一个错误,是EaseUI中的第三方框架<code>PSTCollectionView</code>报错,错误如下:<br><img src="/Users/qingongguoji1/Desktop/12402.png" alt=""><br>我的解决方法;<br>1.<code>- (NSArray *)visibleCells {
+    return [[_allVisibleViewsDict allValues] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
+        return nil;
+//        return [evaluatedObject isKindOfClass:PSTCollectionViewCell.class] &amp;&amp; CGRectIntersectsRect(self.bounds, [evaluatedObject frame]);
+    }]];
+}</code><br>2.pod管理了EaseUI-&gt;EMUIKit-&gt;3rdparty目录下的<code>MBProgressHUD</code>,<code>MJRefresh</code>以及<code>MWPhotoBrowser</code> 还有<code>DACircularProgress</code> 把重复的文件去掉就可以. 特别注意MWPhotoBrowser目录下的<code>EMSDWebImage</code>需要自己拷贝一份,并导入项目中.<br>而<code>PSTCollectionView</code>,我在项目中搜索了一下,发现EaseUI并没有使用到这个框架,所以就直接删除了</p>
+<p>调整之后我的文件结构如下:<br><img src="/Users/qingongguoji1/Desktop/1.png" alt=""><br>编译整个项目,然后没有错误了</p>
+<p>剩下的几个功能完全可以参考官方文档就行,下面要放大招了:<br>第一个大问题：接受到消息后，会话列表<code>ConversationListController</code>没有自动刷新，需要手动下拉才能刷新<br>解决：<br>原因一：没有注册回调事件；<code>[ChatUIHelper shareHelper];</code>（参考简版demo源码AppDelegate+EaseMob.m的第44行）<br>原因二：没有初始化<code>conversationListVC</code>，导致没有调用刷新方法。<br><code>ChatDemo-UI3.0/ChatUI/Class/ChatUIHelper.m</code>第265行<br>解决方案：参考简版demo，在<code>MainViewController.m</code>的第86行初始化：<br><code>[ChatUIHelper shareHelper].contactViewVC = _contactsVC;
+[ChatUIHelper shareHelper].conversationListVC = _chatListVC;</code><br>第二个大问题:<br>集成环信到自己的项目中: 解决根控制器推不出来视频语音通信界面,在<code>ChatUIHelper.m</code>中的第575行和749行分别替换成<br><code>UIViewController *vc = [UIApplication sharedApplication].keyWindow.rootViewController;
+                    [ChatUIHelper shareHelper].mainVC = vc;
+                    [vc presentViewController:self.callController animated:NO completion:nil];</code><br>解决结成到自己项目中,消息页面收到消息不能同步到tabbar上的bug ,在<code>mainViewController</code>中加有个定时器,设置成0.1秒调用一次<code>setupUnreadMessageCount</code>,这样就能解决进入app的时候就可以接收到未读的数量,代码如下:<br><code>NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(setupUnreadMessageCount) userInfo:nil repeats:YES];</code><br>    // 主线程也会抽时间处理一下timer（不管主线程是否正在其他事件）<br>    <code>[[NSRunLoop mainRunLoop] addTimer:timer ``forMode:NSRunLoopCommonModes]</code>;<br>同时在<code>ContactsViewController</code>中也要用定时器调用一下<code>setupUnreadMessageCount</code>方法,代码如上,这样就能同步刷新未读消息数.</p>
+<p>若是集成后音视频的时候没有提示音,在<code>CallViewController</code>的<code>ViewDidload</code>中调用一下<br>  <code>[self _beginRing];</code>若是报崩 在本地添加一个<code>callRing.mp3</code>名称的音乐<br>这是自己在开发过程中遇到的小问题,希望对大家能有帮助,BryantWang坚持用心写经历!喜欢我的可以去github:<a href="">https://github.com/BryantWang81</a>上关注我哦后期会坚持更新自己的经历.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        
+	<div id="comment">
+	
+	<!-- 多说评论框 start -->
+	 <div class="ds-thread" data-thread-key="/2016/11/03/环信集成中的bug/" data-title="环信集成中遇到的坑" data-url="http://yoursite.com/2016/11/03/环信集成中的bug/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"iTimeTraveler"};
+	  (function() {
+	    var ds = document.createElement('script');
+	    ds.type = 'text/javascript';ds.async = true;
+	    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+	    ds.charset = 'UTF-8';
+	    (document.getElementsByTagName('head')[0] 
+	     || document.getElementsByTagName('body')[0]).appendChild(ds);
+	  })();
+	  </script>
+	<!-- 多说公共JS代码 end -->
+	
+	</div>
+
+
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IM/">IM</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/02/25/hello-world的副本/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Neuer</strong>
+      <div class="article-nav-title">
+        
+          Hello World
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Inhalt</strong>
+    
+    <ol class="toc">Nichts</ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      <div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2017 BryantWang&#39;s Blog All Rights Reserved.</p>
+	      <p id="copyRightCn">BryantWang hält Urheberrechtsansprüche.</p>
+	</div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            BryantWang&#39;s Blog
+          </div>
+          <div class="panel-body">
+            Copyright © 2017 BryantWang All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+</body>
+</html>
