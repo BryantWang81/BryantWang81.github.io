@@ -21,18 +21,18 @@
 <meta property="og:description" content="公司项目中需要集成即时聊天的功能,在现有项目的基础上集成环信最新的SDK遇到了很多坑,所以记录下来,看到坑就不要再往里跳了😜1.iOS SDK导入通过 Cocoapods 下载地址：不包含实时语音版本 SDK（HyphenateLite），引用时 #import &amp;lt;HyphenateLite_CN/EMSDK.h&amp;gt;pod &amp;#39;HyphenateLite_CN&amp;#39;
 
 配置工">
-<meta property="og:image" content="http://yoursite.com/file:///Users/qingongguoji1/Documents/Blog/source/_posts/1.png">
-<meta property="og:image" content="http://yoursite.com/file:///Users/qingongguoji1/Documents/Blog/source/_posts/2.png">
-<meta property="og:image" content="http://yoursite.com/file:///Users/qingongguoji1/Documents/Blog/source/_posts/3.png">
-<meta property="og:image" content="http://yoursite.com/file:///Users/qingongguoji1/Documents/Blog/source/_posts/4.png">
-<meta property="og:image" content="http://yoursite.com/file:///Users/qingongguoji1/Documents/Blog/source/_posts/5.png">
-<meta property="og:updated_time" content="2017-03-10T14:34:03.000Z">
+<meta property="og:image" content="http://yoursite.com/file:///Users/qingongguoji1/Documents/Blog/public/images/1.png">
+<meta property="og:image" content="http://yoursite.com/file:///Users/qingongguoji1/Documents/Blog/public/images/2.png">
+<meta property="og:image" content="http://yoursite.com/file:///Users/qingongguoji1/Documents/Blog/public/images/3.png">
+<meta property="og:image" content="http://yoursite.com/file:///Users/qingongguoji1/Documents/Blog/public/images/4.png">
+<meta property="og:image" content="http://yoursite.com/file:///Users/qingongguoji1/Documents/Blog/public/images/5.png">
+<meta property="og:updated_time" content="2017-03-10T14:55:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="环信集成中遇到的坑">
 <meta name="twitter:description" content="公司项目中需要集成即时聊天的功能,在现有项目的基础上集成环信最新的SDK遇到了很多坑,所以记录下来,看到坑就不要再往里跳了😜1.iOS SDK导入通过 Cocoapods 下载地址：不包含实时语音版本 SDK（HyphenateLite），引用时 #import &amp;lt;HyphenateLite_CN/EMSDK.h&amp;gt;pod &amp;#39;HyphenateLite_CN&amp;#39;
 
 配置工">
-<meta name="twitter:image" content="http://yoursite.com/file:///Users/qingongguoji1/Documents/Blog/source/_posts/1.png">
+<meta name="twitter:image" content="http://yoursite.com/file:///Users/qingongguoji1/Documents/Blog/public/images/1.png">
   
     <link rel="alternate" href="/atom.xml" title="BryantWang&#39;s Blog" type="application/atom+xml">
   
@@ -223,14 +223,13 @@
 <li><code>MJRefresh:</code> 用于页面刷新</li>
 <li><code>MBProgressHUD:</code> 用于提示加载刷新<br>如果你的项目是使用pod管理的,并且有<code>MJRefresh,MBProgressHUD</code>第三方库,那么可以删除<code>EaseUI</code>中重复的库,但是不能直接删除EaseUI-&gt;EMUIKit-&gt;3rdparty-&gt;MWPhotoBrowser的文件夹, 这个MWPhotoBrowser文件夹下并不只是有<code>MWPhotoBrowser</code>,还有环信自己封装的<code>EMSDWebImage</code>,还有第三方的<code>DACircularProgress</code>及<code>PSTCollectionView</code></li>
 </ul>
-<p>4.1导入EaseUI<br><img src="file:///Users/qingongguoji1/Documents/Blog/source/_posts/1.png" alt="1.png"></p>
-<p>编译之后,我的项目出现了26个错误<br><img src="file:///Users/qingongguoji1/Documents/Blog/source/_posts/2.png" alt="2.png"><br>解决方案:<br>查看EaseUI目录下的<code>EaseUI-Prefix.pch</code>文件,把里面的代码拷贝在自己项目的pch文件中,并删除<code>EaseUI-Prefix.pch</code>,并在自己的代码中添加<code>#ifdef __OBJC__ #endif</code><br>如下图所示<br><img src="file:///Users/qingongguoji1/Documents/Blog/source/_posts/3.png" alt="3.png"><br>走到这一步后我的项目中还有一个错误,是EaseUI中的第三方框架<code>PSTCollectionView</code>报错,错误如下:<br><img src="file:///Users/qingongguoji1/Documents/Blog/source/_posts/4.png" alt="4.png"><br>我的解决方法;</p>
+<p>4.1导入EaseUI<br><img src="file:///Users/qingongguoji1/Documents/Blog/public/images/1.png" alt="1.png"></p>
+<p>编译之后,我的项目出现了26个错误<br><img src="file:///Users/qingongguoji1/Documents/Blog/public/images/2.png" alt="2.png"><br>解决方案:<br>查看EaseUI目录下的<code>EaseUI-Prefix.pch</code>文件,把里面的代码拷贝在自己项目的pch文件中,并删除<code>EaseUI-Prefix.pch</code>,并在自己的代码中添加<code>#ifdef __OBJC__ #endif</code><br>如下图所示<br><img src="file:///Users/qingongguoji1/Documents/Blog/public/images/3.png" alt="3.png"><br>走到这一步后我的项目中还有一个错误,是EaseUI中的第三方框架<code>PSTCollectionView</code>报错,错误如下:<br><img src="file:///Users/qingongguoji1/Documents/Blog/public/images/4.png" alt="4.png"><br>我的解决方法;</p>
 <blockquote>
 <p>1.- (NSArray <em>)visibleCells {<br>    return [[_allVisibleViewsDict allValues] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary </em>bindings) {<br>        return nil;<br>//        return [evaluatedObject isKindOfClass:PSTCollectionViewCell.class] &amp;&amp; CGRectIntersectsRect(self.bounds, [evaluatedObject frame]);<br>    }]];<br>}</p>
 </blockquote>
 <p>2.pod管理了EaseUI-&gt;EMUIKit-&gt;3rdparty目录下的<br>MBProgressHUD<code>,</code>MJRefresh<code>以及</code>MWPhotoBrowser<code>还有</code>DACircularProgress<code>把重复的文件去掉就可以. 特别注意MWPhotoBrowser目录下的</code>EMSDWebImage<code>需要自己拷贝一份,并导入项目中.
-而</code>PSTCollectionView`,我在项目中搜索了一下,发现EaseUI并没有使用到这个框架,所以就直接删除了</p>
-<p>调整之后我的文件结构如下:<br><img src="file:///Users/qingongguoji1/Documents/Blog/source/_posts/5.png" alt="5.png"><br>编译整个项目,然后没有错误了</p>
+而</code>PSTCollectionView`,我在项目中搜索了一下,发现EaseUI并没有使用到这个框架,所以就直接删除了<br>调整之后我的文件结构如下:<br><img src="file:///Users/qingongguoji1/Documents/Blog/public/images/5.png" alt="5.png"><br>编译整个项目,然后没有错误了</p>
 <p>剩下的几个功能完全可以参考官方文档就行,下面要放大招了:<br>第一个大问题：接受到消息后，会话列表<code>ConversationListController</code>没有自动刷新，需要手动下拉才能刷新<br>解决：<br>原因一：没有注册回调事件；<code>[ChatUIHelper shareHelper];</code>（参考简版demo源码AppDelegate+EaseMob.m的第44行）<br>原因二：没有初始化<code>conversationListVC</code>，导致没有调用刷新方法。<br><code>ChatDemo-UI3.0/ChatUI/Class/ChatUIHelper.m</code>第265行<br>解决方案：参考简版demo，在<code>MainViewController.m</code>的第86行初始化：</p>
 <blockquote>
 <p>[ChatUIHelper shareHelper].contactViewVC = _contactsVC;<br>[ChatUIHelper shareHelper].conversationListVC = _chatListVC;</p>
