@@ -236,50 +236,61 @@
         <p>公司项目中需要集成即时聊天的功能,在现有项目的基础上集成环信最新的SDK遇到了很多坑,所以记录下来,看到坑就不要再往里跳了😜<br>1.iOS SDK导入<br>通过 Cocoapods 下载地址：<br>不包含实时语音版本 SDK（HyphenateLite），引用时 <code>#import &lt;HyphenateLite_CN/EMSDK.h&gt;</code><br><code>pod &#39;HyphenateLite_CN&#39;</code></p>
 <ol>
 <li>配置工程<ul>
-<li>设置工程属性<br>第 1 步：向Build Phases → Link Binary With Libraries 中添加依赖库。<br>SDK 依赖库有：<br><code>CoreMedia.framework
-AudioToolbox.framework
-AVFoundation.framework
-MobileCoreServices.framework
-ImageIO.framework
-libc++.dylib
-libz.dylib
-libstdc++.6.0.9.dylib
-libsqlite3.dylib</code>（如果使用的是 xcode7，后缀为 tbd）<br>第 2 步：SDK 不支持 bitcode，向 Build Settings → Linking → Enable Bitcode 中设置 NO。</li>
+<li>设置工程属性<br>第 1 步：向Build Phases → Link Binary With Libraries 中添加依赖库。<br>SDK 依赖库有：<br>##引用<blockquote>
+<p>CoreMedia.framework<br>AudioToolbox.framework<br>AVFoundation.framework<br>MobileCoreServices.framework<br>ImageIO.framework<br>libc++.dylib<br>libz.dylib<br>libstdc++.6.0.9.dylib<br>libsqlite3.dylib<br>（如果使用的是 xcode7，后缀为 tbd）<br>第 2 步：SDK 不支持 bitcode，向 Build Settings → Linking → Enable Bitcode 中设置 NO。</p>
+</blockquote>
+</li>
 </ul>
 </li>
 </ol>
 <ul>
 <li>编译工程<br>我相信大家到这里都应该没有问题,如果出现问题,请详细参考官方文档<br>3.iOS SDK基础功能</li>
-<li>初始化SDK<br>第 1 步：引入相关头文件#import “EMSDK.h”<br>第 2 步：在工程的 AppDelegate 中的以下方法中，调用 SDK 对应方法。<br>`- (BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary</em>)launchOptions {<br>  // 环信<br>  //AppKey:注册的AppKey，详细见下面注释。<br>  //apnsCertName:推送证书名（不需要加后缀），详细见下面注释。<br>  EMOptions *options = [EMOptions optionsWithAppkey:@”110108007702#xingnltest”];<br>  //options.apnsCertName = @”istore_dev”;<br>  [[EMClient sharedClient] initializeSDKWithOptions:options];<br>  return YES;<br>}<br>// APP进入后台</li>
-</ul>
+<li>初始化SDK<br>第 1 步：引入相关头文件#import “EMSDK.h”<br>第 2 步：在工程的 AppDelegate 中的以下方法中，调用 SDK 对应方法。<br>##<blockquote>
 <ul>
-<li>(void)applicationDidEnterBackground:(UIApplication *)application{<br>  [[EMClient sharedClient] applicationDidEnterBackground:application];<br>}<br>// APP将要从后台返回</li>
-<li>(void)applicationWillEnterForeground:(UIApplication *)application{<br>   [[EMClient sharedClient] applicationWillEnterForeground:application];<br>}`</li>
+<li>(BOOL)application:(UIApplication <em>)application didFinishLaunchingWithOptions:(NSDictionary</em>)launchOptions {<br>// 环信<br>//AppKey:注册的AppKey，详细见下面注释。<br>//apnsCertName:推送证书名（不需要加后缀），详细见下面注释。<br>EMOptions *options = [EMOptions optionsWithAppkey:@”110108007702#xingnltest”];<br>//options.apnsCertName = @”istore_dev”;<br>[[EMClient sharedClient] initializeSDKWithOptions:options];<br>return YES;<br>}<br>// APP进入后台<br>##</li>
+<li>(void)applicationDidEnterBackground:(UIApplication *)application{<br>[[EMClient sharedClient] applicationDidEnterBackground:application];<br>}<br>// APP将要从后台返回<br>##</li>
+<li>(void)applicationWillEnterForeground:(UIApplication *)application{<br> [[EMClient sharedClient] applicationWillEnterForeground:application];<br>}`</li>
 </ul>
-<ul>
+</blockquote>
+</li>
 <li>注册<br>注册模式分两种，开放注册和授权注册。<ul>
 <li>只有开放注册时，才可以客户端注册。开放注册是为了测试使用，正式环境中不推荐使用该方式注册环信账号。</li>
-<li>授权注册的流程应该是您服务器通过环信提供的 REST API<br>注册，之后保存到您的服务器或返回给客户端。<br>`EMError *error = [[EMClient sharedClient] registerWithUsername:@”8001” password:@”111111”];<br>if (error==nil) {<br>NSLog(@”注册成功”);<br>}</li>
+<li>授权注册的流程应该是您服务器通过环信提供的 REST API<br>注册，之后保存到您的服务器或返回给客户端。<br>##<blockquote>
+<p>EMError *error = [[EMClient sharedClient] registerWithUsername:@”8001” password:@”111111”];<br>if (error==nil) {<br>NSLog(@”注册成功”);<br>}</p>
+</blockquote>
+</li>
 </ul>
 </li>
-<li><p>登录<br>EMError *error = [[EMClient sharedClient] loginWithUsername:@”8001” password:@”111111”];<br>if (!error) {<br>NSLog(@”登录成功”);<br>}<br>`<br>4.EaseUI 使用指南(重点)<br>按照<a href="">官网的EaseUI</a> 使用指南集成之后总是有很多的bug,<br>先看一下EaseUI 中用到的第三方库：</p>
+<li>登录<br>##<blockquote>
+<p>EMError *error = [[EMClient sharedClient] loginWithUsername:@”8001” password:@”111111”];<br>if (!error) {<br>NSLog(@”登录成功”);<br>}</p>
+</blockquote>
 </li>
-<li><p><code>MWPhotoBrowser:</code> 图片处理库，浏览显示</p>
-</li>
+</ul>
+<p>4.EaseUI 使用指南(重点)<br>按照<a href="">官网的EaseUI</a> 使用指南集成之后总是有很多的bug,<br>先看一下EaseUI 中用到的第三方库：</p>
+<ul>
+<li><code>MWPhotoBrowser:</code> 图片处理库，浏览显示</li>
 <li><code>MJRefresh:</code> 用于页面刷新</li>
 <li><code>MBProgressHUD:</code> 用于提示加载刷新<br>如果你的项目是使用pod管理的,并且有<code>MJRefresh,MBProgressHUD</code>第三方库,那么可以删除<code>EaseUI</code>中重复的库,但是不能直接删除EaseUI-&gt;EMUIKit-&gt;3rdparty-&gt;MWPhotoBrowser的文件夹, 这个MWPhotoBrowser文件夹下并不只是有<code>MWPhotoBrowser</code>,还有环信自己封装的<code>EMSDWebImage</code>,还有第三方的<code>DACircularProgress</code>及<code>PSTCollectionView</code></li>
 </ul>
-<p>4.1导入EaseUI<br><img src="/Users/qingongguoji1/Desktop/1240.jpep.png" alt=""><br>编译之后,我的项目出现了26个错误<br><img src="/Users/qingongguoji1/Desktop/1240.png" alt=""><br>解决方案:<br>查看EaseUI目录下的<code>EaseUI-Prefix.pch</code>文件,把里面的代码拷贝在自己项目的pch文件中,并删除<code>EaseUI-Prefix.pch</code>,并在自己的代码中添加<code>#ifdef __OBJC__ #endif</code><br>如下图所示<br><img src="/Users/qingongguoji1/Desktop/12401.png" alt=""><br>走到这一步后我的项目中还有一个错误,是EaseUI中的第三方框架<code>PSTCollectionView</code>报错,错误如下:<br><img src="/Users/qingongguoji1/Desktop/12402.png" alt=""><br>我的解决方法;<br>1.<code>- (NSArray *)visibleCells {
-    return [[_allVisibleViewsDict allValues] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary *bindings) {
-        return nil;
-//        return [evaluatedObject isKindOfClass:PSTCollectionViewCell.class] &amp;&amp; CGRectIntersectsRect(self.bounds, [evaluatedObject frame]);
-    }]];
-}</code><br>2.pod管理了EaseUI-&gt;EMUIKit-&gt;3rdparty目录下的<code>MBProgressHUD</code>,<code>MJRefresh</code>以及<code>MWPhotoBrowser</code> 还有<code>DACircularProgress</code> 把重复的文件去掉就可以. 特别注意MWPhotoBrowser目录下的<code>EMSDWebImage</code>需要自己拷贝一份,并导入项目中.<br>而<code>PSTCollectionView</code>,我在项目中搜索了一下,发现EaseUI并没有使用到这个框架,所以就直接删除了</p>
+<p>4.1导入EaseUI<br><img src="/Users/qingongguoji1/Desktop/1240.jpep.png" alt=""><br>编译之后,我的项目出现了26个错误<br><img src="/Users/qingongguoji1/Desktop/1240.png" alt=""><br>解决方案:<br>查看EaseUI目录下的<code>EaseUI-Prefix.pch</code>文件,把里面的代码拷贝在自己项目的pch文件中,并删除<code>EaseUI-Prefix.pch</code>,并在自己的代码中添加<code>#ifdef __OBJC__ #endif</code><br>如下图所示<br><img src="/Users/qingongguoji1/Desktop/12401.png" alt=""><br>走到这一步后我的项目中还有一个错误,是EaseUI中的第三方框架<code>PSTCollectionView</code>报错,错误如下:<br><img src="/Users/qingongguoji1/Desktop/12402.png" alt=""><br>我的解决方法;</p>
+<p>##</p>
+<blockquote>
+<p>1.- (NSArray <em>)visibleCells {<br>    return [[_allVisibleViewsDict allValues] filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id evaluatedObject, NSDictionary </em>bindings) {<br>        return nil;<br>//        return [evaluatedObject isKindOfClass:PSTCollectionViewCell.class] &amp;&amp; CGRectIntersectsRect(self.bounds, [evaluatedObject frame]);<br>    }]];<br>}<br>2.pod管理了EaseUI-&gt;EMUIKit-&gt;3rdparty目录下的<code>MBProgressHUD</code>,<code>MJRefresh</code>以及<code>MWPhotoBrowser</code> 还有<code>DACircularProgress</code> 把重复的文件去掉就可以. 特别注意MWPhotoBrowser目录下的<code>EMSDWebImage</code>需要自己拷贝一份,并导入项目中.<br>而<code>PSTCollectionView</code>,我在项目中搜索了一下,发现EaseUI并没有使用到这个框架,所以就直接删除了</p>
+</blockquote>
 <p>调整之后我的文件结构如下:<br><img src="/Users/qingongguoji1/Desktop/1.png" alt=""><br>编译整个项目,然后没有错误了</p>
 <p>剩下的几个功能完全可以参考官方文档就行,下面要放大招了:<br>第一个大问题：接受到消息后，会话列表<code>ConversationListController</code>没有自动刷新，需要手动下拉才能刷新<br>解决：<br>原因一：没有注册回调事件；<code>[ChatUIHelper shareHelper];</code>（参考简版demo源码AppDelegate+EaseMob.m的第44行）<br>原因二：没有初始化<code>conversationListVC</code>，导致没有调用刷新方法。<br><code>ChatDemo-UI3.0/ChatUI/Class/ChatUIHelper.m</code>第265行<br>解决方案：参考简版demo，在<code>MainViewController.m</code>的第86行初始化：<br><code>[ChatUIHelper shareHelper].contactViewVC = _contactsVC;
-[ChatUIHelper shareHelper].conversationListVC = _chatListVC;</code><br>第二个大问题:<br>集成环信到自己的项目中: 解决根控制器推不出来视频语音通信界面,在<code>ChatUIHelper.m</code>中的第575行和749行分别替换成<br><code>UIViewController *vc = [UIApplication sharedApplication].keyWindow.rootViewController;
-                    [ChatUIHelper shareHelper].mainVC = vc;
-                    [vc presentViewController:self.callController animated:NO completion:nil];</code><br>解决结成到自己项目中,消息页面收到消息不能同步到tabbar上的bug ,在<code>mainViewController</code>中加有个定时器,设置成0.1秒调用一次<code>setupUnreadMessageCount</code>,这样就能解决进入app的时候就可以接收到未读的数量,代码如下:<br><code>NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(setupUnreadMessageCount) userInfo:nil repeats:YES];</code><br>    // 主线程也会抽时间处理一下timer（不管主线程是否正在其他事件）<br>    <code>[[NSRunLoop mainRunLoop] addTimer:timer ``forMode:NSRunLoopCommonModes]</code>;<br>同时在<code>ContactsViewController</code>中也要用定时器调用一下<code>setupUnreadMessageCount</code>方法,代码如上,这样就能同步刷新未读消息数.</p>
+[ChatUIHelper shareHelper].conversationListVC = _chatListVC;</code><br>第二个大问题:<br>集成环信到自己的项目中: 解决根控制器推不出来视频语音通信界面,在<code>ChatUIHelper.m</code>中的第575行和749行分别替换成</p>
+<p>##</p>
+<blockquote>
+<p>UIViewController *vc = [UIApplication sharedApplication].keyWindow.rootViewController;<br>                    [ChatUIHelper shareHelper].mainVC = vc;<br>                    [vc presentViewController:self.callController animated:NO completion:nil];</p>
+</blockquote>
+<p>解决结成到自己项目中,消息页面收到消息不能同步到tabbar上的bug ,在<code>mainViewController</code>中加有个定时器,设置成0.1秒调用一次<code>setupUnreadMessageCount</code>,这样就能解决进入app的时候就可以接收到未读的数量,代码如下:</p>
+<p>##引用</p>
+<blockquote>
+<p>NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(setupUnreadMessageCount) userInfo:nil repeats:YES];<br>    // 主线程也会抽时间处理一下timer（不管主线程是否正在其他事件）</p>
+<p>##引用<br>[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];</p>
+</blockquote>
+<p>同时在<code>ContactsViewController</code>中也要用定时器调用一下<code>setupUnreadMessageCount</code>方法,代码如上,这样就能同步刷新未读消息数.</p>
 <p>若是集成后音视频的时候没有提示音,在<code>CallViewController</code>的<code>ViewDidload</code>中调用一下<br>  <code>[self _beginRing];</code>若是报崩 在本地添加一个<code>callRing.mp3</code>名称的音乐<br>这是自己在开发过程中遇到的小问题,希望对大家能有帮助,BryantWang坚持用心写经历!喜欢我的可以去github:<a href="">https://github.com/BryantWang81</a>上关注我哦后期会坚持更新自己的经历.</p>
 
       
